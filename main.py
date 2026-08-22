@@ -1,6 +1,8 @@
 
 
 
+def login_function():
+
 
 
 
@@ -16,4 +18,3 @@ choice = input("Enter your choice: ")
 while True:
     if choice == "1":
         pass
-    

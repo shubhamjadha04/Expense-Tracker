@@ -1,12 +1,12 @@
 import mysql.connector
 
-connect = mysql.connector.connect(
+conn = mysql.connector.connect(
     host= "localhost",
     user = "root",
     password = "shubham2004",
     database = "Expenses"
     )
 
-cursor = connect.cursor()
+cursor = conn.cursor()
 
 print("connection has done.")
