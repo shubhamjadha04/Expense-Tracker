@@ -2,6 +2,59 @@ from database import conn, cursor
 
 
 
+# Registration function
+def Register_function():
+    name = input("Enter Your Name: ")
+    email = input("Enter Your email: ")
+    password = input("Enter Your Password: ")
+
+    query = """INSERT INTO users(name,email,password)
+                VALUES(%s,%s,%s)"""
+
+    cursor.execute(query,(name, email, password))
+    conn.commit()
+
+    print("Registration Successful!..")
+
+
+# Login function
+def login_function():
+    email = input("Enter Your email: ")
+    password = input("Enter Your password: ")
+
+    query= """
+            SELECT * FROM users 
+            WHERE email = %s AND password = %s
+    """
+    cursor.execute(query,(email,password))
+    user = cursor.fetchone()
+
+    if user:
+        print("Login Successful!..")
+
+    else:
+        print("Invalid email or password..")
+    
+
+
+
+
+print("----Register--or--login----")
+print("1. Register: ")
+print("2. login: ")
+
+log_choice = input("Enter your choice: ")
+if log_choice == "1":
+    Register_function()
+
+elif log_choice == "2":
+    login_function()
+
+
+
+
+
+
 
 
 # print("-------- Expense Tracker --------")
@@ -26,22 +79,4 @@ from database import conn, cursor
 #     print("INVALID INPUT..")
 
 
-
-# Registration function
-
-def Register_function():
-    name = input("Enter Your Name: ")
-    email = input("Enter Your email: ")
-    password = input("Enter Your Password: ")
-
-    query = """INSERT INTO users(name,email,password)
-                VALUES(%s,%s,%s)"""
-
-    cursor.execute(query,(name, email, password))
-    conn.commit()
-
-    print("Registration Successful!..")
-
-
-Register_function()
 
