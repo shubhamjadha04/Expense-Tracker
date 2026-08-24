@@ -13,8 +13,10 @@ def register_user():
     cursor.execute(query,(name, email, password))
     conn.commit()
 
+    user_id =   cursor.lastrowid
     print("Registration Successful!..")
-    expense_menu()
+    print(f"Your User Id = :{user_id}")
+    expense_menu(user_id)
 
 
 # Login function
@@ -31,17 +33,45 @@ def login_user():
 
     if user:
         print("Login Successful!..")
-        expense_menu()
+        user_id = user[0]
+        expense_menu(user_id)
 
     else:
         print("Invalid email or password..")
     
+# the add expense function
+
+def add_expense(user_id):
+    category = input("Enter the categery: ")
+    amount = float(input("Enter the amount: "))
+    description = input("Enter the description: ")
+
+    query = """ 
+            INSERT INTO expenses 
+            (user_id,category, amount, description,expense_date)
+            VALUES(%s,%s,%s,%s,NOW())
+            """
+    cursor.execute(query,(user_id,category,amount,description))
+    conn.commit()
+    print("Expense added successfully..")
+
+def view_expense(user_id):
+    pass
+
+
+def delete_expnse(user_id):
+    pass
+
+def totoal_expense(user_id):
+    pass
+
+
 
 
 
 
 # The main expense tarctor menu
-def expense_menu():
+def expense_menu(user_id):
     print("-------- Expense Tracker --------")
     print("1. Add Expense.")
     print("2. View Expense.")
@@ -49,23 +79,21 @@ def expense_menu():
     print("4. Totoal Expanse.")
     print("5. Exit")
 
-    choice = input("Enter your choice: ")
-
     while True:
+        choice = input("Enter your choice: ")
+        
         if choice == "1":
-            Category = input("Enter the categery: ")
-            amount  = int(input("Enter the amount: "))
-            Description = input("Enter the Description: ")
+            add_expense(user_id)
 
-            query = """
-                        INSERT INTO 
-                        
-                            """
+        elif choice == "2":
+            pass
 
+        elif choice == "3":
+            pass
 
-
-
-
+        elif choice == "4":
+            pass
+        
         elif choice == "5":
             print("Exited...")
             break
