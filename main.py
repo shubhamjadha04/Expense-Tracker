@@ -17,7 +17,9 @@ def register_user():
     user_id =   cursor.lastrowid
     print("Registration Successful!..")
     print(f"Your User Id = :{user_id}")
-    expense_menu(user_id)
+    login_user()
+    
+
 
 
 # Login function
@@ -39,9 +41,9 @@ def login_user():
 
     else:
         print("Invalid email or password..")
-    
-# the add expense function
 
+
+# the add expense function
 def add_expense(user_id):
     try:
         category = input("Enter the categery: ")
@@ -66,7 +68,7 @@ def add_expense(user_id):
     except Exception as e:
         print("Unexpected error:",e)
 
-
+# view expense function
 def view_expense(user_id):
     query = """
             SELECT category, amount, description, expense_date FROM expenses 
@@ -86,12 +88,49 @@ def view_expense(user_id):
             """)
     else:
         print("No expenses found !..")
-    
 
 
+# Delete expense function
 def delete_expnse(user_id):
-    pass
+        
+        query = """
+        SELECT expense_id, category, amount, description, expense_date
+        FROM expenses
+        WHERE user_id = %s
+        """
 
+        cursor.execute(query, (user_id,))
+        expenses = cursor.fetchall()
+
+        print("\nYour Expenses")
+        print("-" * 70)
+        print(f"{'ID':<5}{'Category':<15}{'Amount':<12}{'Description':<20}{'Date'}")
+        print("-" * 70)
+
+        for expense in expenses:
+            print(f"{expense[0]:<5}{expense[1]:<15}₹{expense[2]:<10}{expense[3]:<20}{expense[4]}\n")
+
+        try:
+            del_id = int(input("Enter the id of the expense which yo want to delete: "))
+
+            del_query = """
+                        DELETE FROM expenses 
+                        WHERE expense_id = %s
+                        and user_id =%s
+                        """
+            cursor.execute(del_query,(del_id,user_id))
+            conn.commit()
+            print(f"The expense deleted Successfully..")
+
+        except ValueError:
+            print("Invalid Input....")
+
+        except Exception as e:
+            print("Unepected error ",e)
+
+
+
+# Total Expense function
 def totoal_expense(user_id):
     pass
 
@@ -119,10 +158,10 @@ def expense_menu(user_id):
             view_expense(user_id)
 
         elif choice == "3":
-            pass
+            delete_expnse(user_id)
 
         elif choice == "4":
-            pass
+            totoal_expense(user_id)
         
         elif choice == "5":
             print("Exited...")
@@ -133,8 +172,7 @@ def expense_menu(user_id):
         
 
 
-
-
+print("-------WELCOME TO THE EXPENSE TRACKER-------")
 print("----Register--or--login----")
 print("1. Register: ")
 print("2. login: ")
@@ -142,7 +180,7 @@ print("2. login: ")
 log_choice = input("Enter your choice: ")
 if log_choice == "1":
     register_user()
-    login_user()
+   
 elif log_choice == "2":
     login_user()
 else:
