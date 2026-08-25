@@ -65,10 +65,28 @@ def add_expense(user_id):
 
     except Exception as e:
         print("Unexpected error:",e)
-        
+
 
 def view_expense(user_id):
-    pass
+    query = """
+            SELECT category, amount, description, expense_date FROM expenses 
+            WHERE user_id = %s"""
+
+    cursor.execute(query,(user_id,))
+    expenses = cursor.fetchall()
+
+    if expenses:
+        for expense in expenses:
+                print(f"""
+            Category    : {expense[0]}
+            Amount      : ₹{expense[1]}
+            Description : {expense[2]}
+            Date        : {expense[3]}
+            -----------------------------
+            """)
+    else:
+        print("No expenses found !..")
+    
 
 
 def delete_expnse(user_id):
@@ -98,7 +116,7 @@ def expense_menu(user_id):
             add_expense(user_id)
 
         elif choice == "2":
-            pass
+            view_expense(user_id)
 
         elif choice == "3":
             pass
@@ -124,6 +142,7 @@ print("2. login: ")
 log_choice = input("Enter your choice: ")
 if log_choice == "1":
     register_user()
+    login_user()
 elif log_choice == "2":
     login_user()
 else:
