@@ -1,4 +1,5 @@
 from database import conn, cursor
+import mysql
 
 
 # Registration function
@@ -42,18 +43,29 @@ def login_user():
 # the add expense function
 
 def add_expense(user_id):
-    category = input("Enter the categery: ")
-    amount = float(input("Enter the amount: "))
-    description = input("Enter the description: ")
+    try:
+        category = input("Enter the categery: ")
+        amount = float(input("Enter the amount: "))
+        description = input("Enter the description: ")
 
-    query = """ 
-            INSERT INTO expenses 
-            (user_id,category, amount, description,expense_date)
-            VALUES(%s,%s,%s,%s,NOW())
-            """
-    cursor.execute(query,(user_id,category,amount,description))
-    conn.commit()
-    print("Expense added successfully..")
+        query = """ 
+                INSERT INTO expenses 
+                (user_id,category, amount, description,expense_date)
+                VALUES(%s,%s,%s,%s,NOW())
+                """
+        cursor.execute(query,(user_id,category,amount,description))
+        conn.commit()
+        print(f"The amount added to {category} category..")
+
+    except ValueError:
+        print("Amount must be a valid number..")
+
+    except mysql.connection.Error as err:
+        print("Database error: ",err)
+
+    except Exception as e:
+        print("Unexpected error:",e)
+        
 
 def view_expense(user_id):
     pass
