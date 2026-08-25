@@ -175,7 +175,7 @@ def expense_menu(user_id):
             break
         else:
             print("INVALID INPUT..")
-            break
+            continue
         
 
 #the starting function
