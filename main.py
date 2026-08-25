@@ -1,7 +1,6 @@
 from database import conn, cursor
 import mysql
 
-
 # Registration function
 def register_user():
     name = input("Enter Your Name: ")
@@ -129,14 +128,22 @@ def delete_expnse(user_id):
             print("Unepected error ",e)
 
 
-
 # Total Expense function
-def totoal_expense(user_id):
-    pass
+def total_expense(user_id):
+    query = """
+            SELECT SUM(amount)
+            FROM expenses
+            WHERE user_id = %s
+            """
 
+    cursor.execute(query,(user_id,))
 
+    expense = cursor.fetchone()
 
-
+    if expense[0] is not None:
+        print(f"Your total expense: {expense[0]}rs.")
+    else:
+        print("Your expense is 0.00rs")
 
 
 # The main expense tarctor menu
@@ -161,7 +168,7 @@ def expense_menu(user_id):
             delete_expnse(user_id)
 
         elif choice == "4":
-            totoal_expense(user_id)
+            total_expense(user_id)
         
         elif choice == "5":
             print("Exited...")
@@ -171,7 +178,7 @@ def expense_menu(user_id):
             break
         
 
-
+#the starting function
 print("-------WELCOME TO THE EXPENSE TRACKER-------")
 print("----Register--or--login----")
 print("1. Register: ")
@@ -185,5 +192,3 @@ elif log_choice == "2":
     login_user()
 else:
     print("Invalid Option..")
-
-
